@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+	
+		<!-- FAVICON -->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Account | ilVolo</title>
+
+		<!-- CSS -->
+		<link rel="stylesheet" href="css/DidactGothic.css">
+		<link rel="stylesheet" href="css/account.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
+		
+		<!-- JS -->
+		<script src="js/popper.js"></script>	<!-- per dropdown -->
+		<script src="js/jQuery.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script type="text/javascript">
+		//NAVBAR
+		function stampaNavbarRight()
+		{
+			var regUsers = JSON.parse(localStorage.register);
+			var n = new String("");
+			var loggato=false;
+			
+			for (i = 0; i < regUsers.length; i++)
+			{
+				//Se l'utente è loggato stampo nome e bottone Logout
+				if (regUsers[i].login == 1)
+				{
+					n+="<li class='nav-item'>"					
+							+"<a class='nav-link' style='pointer-events:none' class='btn btn-block btn-success'>Ciao, "+regUsers[i].companyName+"</a>"
+						+"</li>"
+						+"<li class='nav-item'>"
+							+"<a class='nav-link' type='submit' style='cursor:pointer' class='btn btn-block btn-success' onclick='esciAccount();' >Logout</a>"
+						+"</li>";
+					
+					//setto la variabile a true
+					loggato=true;
+				}
+			}
+			
+			//se è false, cioè se nessun utente ha effettuato l'accesso
+			if(loggato==false)
+			{
+				n+="<li class='nav-item'>"
+						+"<a class='nav-link' href='login.html'>Login</a>"
+					+"</li>"
+					+"<li class='nav-item'>"
+						+"<a class='nav-link' href='register.html'>Registrati</a>"
+					+"</li>";
+			}
+			
+			document.getElementById("navb").innerHTML = n;	
+		}
+		
+		//STAMPA DATI UTENTE
+		function stampaDatiUtente()
+		{
+			// caricamento dati dal localStorage
+			var regUsers = JSON.parse(localStorage.register);
+
+			var compName = new String("");
+			var compInfo = new String("");
+
+			for (i = 0; i < regUsers.length; i++)
+			{
+				if (regUsers[i].login == 1)
+				{
+
+					compName+=  "<div style='margin-top:10px'></div>"
+								+"<div class='panel-title pull-left'>"
+									+"<h3><strong>"+regUsers[i].companyName+"</strong></h3>"
+								+"</div>"
+								+"<div class='panel-title pull-right'>"
+									+"<div class='btn-group show-on-hover'>"
+										+"<button class='btn btn-sm dropdown-toggle' id='operaz' type='button' data-toggle='dropdown'>"
+										+"<span class='glyphicon glyphicon-wrench'></span>  |  <span class='glyphicon glyphicon-menu-down'></span>"
+										+"</button>"
+										+"<ul class='dropdown-menu' role='menu'>"
+											+"<li><a class='dropdown-item' id='mod' href='change.html'>Modifica dati</a></li>"
+											+"<li><a class='dropdown-item' id='canc' type='submit' onclick='cancellaAccount()'>Cancella account</a></li>"
+										+"</ul>"
+									+"</div>"
+								+"</div>";
+					compInfo="<p style=\"margin-bottom:0\">Nazione:</p><h3 style='padding-left:20px; padding-bottom:5px'><strong>"+regUsers[i].country+"</strong></h3>"+
+					"<p style=\"margin-bottom:0\">Valore azionario: </p><h3 style='padding-left:20px; padding-bottom:5px'><strong>€ "+regUsers[i].valAz+" per azione</strong></h3>"+
+					"<p style=\"margin-bottom:0\">Partner: </p><h3 style='padding-left:20px;'><strong>"+regUsers[i].partner+"</strong></h3>";
+
+					for(j = 0; j < regUsers[i].plane.length; j++)
+					{
+						var a = regUsers[i].plane[j].aereo;
+						var n = regUsers[i].plane[j].numero;
+						var t = regUsers[i].plane[j].tipologia;
+						if(n !== "")
+						{
+							var riga = "<tr>"
+							 + "<td>" + a + "</td>"
+							 + "<td><center>" + n + "</center></td>"
+							 + "<td style='float:right'>" + t + "</td>"
+							 + "</tr>";
+							$('#tbody').append(riga);
+						}
+					}
+				}
+			}
+
+			document.getElementById("compagnia").innerHTML = compName;
+			document.getElementById("compInfo").innerHTML = compInfo;
+		}
+
+		// ESCI ACCOUNT
+		function esciAccount()
+		{	  
+			// caricamento dati dal localStorage
+			var regUsers = JSON.parse(localStorage.register);
+
+			for (i = 0; i < regUsers.length; i++)
+			{
+				//se l'utente è loggato
+				if (regUsers[i].login == 1)
+				{
+					//imposto login a 0 e riscrivo il localStorage
+					regUsers[i].login=0;
+					localStorage.register = JSON.stringify(regUsers);
+					alert("Logout avvenuto con successo");
+					window.location.href = "index.html";
+					return true;
+				}
+			}
+		}
+		
+		// CANCELLA ACCOUNT
+		function cancellaAccount()
+		{
+			// caricamento dati dal localStorage
+			var regUsers = JSON.parse(localStorage.register);
+
+			// cerco utente loggato
+			for(var i = 0; i < regUsers.length; i++)
+				if(regUsers[i].login == 1)
+					var nomeutente = new String(regUsers[i].companyName);
+
+			// rimuovo i valori con splice()
+			for(var i = 0; i < regUsers.length; i++)
+				if (regUsers[i].companyName == nomeutente)
+				{
+					if(confirm("Sei sicuro di voler cancellare l'account?"))
+					{
+						regUsers.splice(i, 1); // splice (indice, quantità)
+						
+						// salvo i dati nel localStorage
+						localStorage.register = JSON.stringify(regUsers);
+
+						window.location.href = "index.html";
+						return false;
+					}
+				}
+		}
+		
+		// Stampa le prenotazioni
+		function stampaPrenotazioni()
+		{
+			//carico i dati dal localStorage
+			var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+			var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+			var regUsers = JSON.parse(localStorage.getItem("register"));
+			
+			var eachPrenotazione = new String("");
+
+			
+			for(i = 0; i < regUsers.length; i++)
+			{
+				if(regUsers[i].login == 1)
+				{
+					if(regUsers[i].prenotazione.length == 0)
+					{
+						eachPrenotazione+="<div class='col-md-12'>"
+												+"<div class='alert alert-danger'>"
+													+"<h5 class='titolo'>Non hai ancora effettuato prenotazioni!</h5>"					
+												+"</div>"
+											+"</div>";
+					}
+					else
+					{
+						for(j = 0; j < regUsers[i].prenotazione.length; j++)
+						{
+							var idTratta = regUsers[i].prenotazione[j].idTratta-1;		//-1 perchè gli id partono da 1 ma il vettore da 0
+							var idAereo = regUsers[i].prenotazione[j].modelloAereo-2;	//-2 perchè gli id partono da 1 ma il vettore da 0
+							var idSlot = regUsers[i].prenotazione[j].slot-1;			//-1 perchè gli id partono da 1 ma il vettore da 0
+							var idPren = regUsers[i].prenotazione[j].idPrenotazione+1;
+							
+							eachPrenotazione+=  "<div class='col-md-12'>"
+													+"<div class='pannello'>"
+														+"<div class='panel-heading'>"
+															+"<h3 class='panel-title pull-left'>"
+																+"<strong>Prenotazione # "+idPren+"</strong>"
+															+"</h3>"
+															+"<h3 class='panel-title pull-right'>"
+																+"<strong>Tratta "+Number(idTratta+1)+"</strong>"
+															+"</h3>"
+															+"<div class='clearfix'></div>"
+														+"</div>"
+														+"<div class='panel-body'>"
+															+"<div class='row'>"
+																+"<div class='col-md-5'>"							
+																	+"<div style='margin-bottom:8px'>"
+																		+"<font size='4'><strong>"+tratteNR[idTratta].from+"&emsp;<img src='img/flight2.svg' width='70' height='35'> &emsp;"+tratteNR[idTratta].to+"</strong></font>"	
+																	+"</div>"																	
+																	+"<div style='margin-bottom:8px'>"
+																		+"<img src='img/two-flags.svg' width='30' height='30' title='Tipologia volo'>&emsp;"
+																		+"<font size='3' style='vertical-align:middle'>"+tratteNR[idTratta].type+"</font>"
+																	+"</div>"
+																	+"<div style='margin-bottom:8px'>"
+																		+"<img src='img/worldwide.svg' width='30' height='30' title='Aereo utilizzato'>&emsp;"
+																		+"<font size='3' style='vertical-align:middle'>"+aereiDisp[idAereo].name+"</font>"
+																	+"</div>"																	
+																+"</div>"
+																+"<center>"
+																	+"<div class='col-md-4'>"
+																		+"<div class='panel-heading slots'>"
+																			+"<h3 class='panel-title'>"
+																				+"<strong>Slot "+tratteNR[idTratta].slots[idSlot].slot+"</strong>"
+																			+"</h3>"
+																		+"</div>"
+																		+"<div class='panel-body slotBody'>"
+																			+"<font size='2'><strong>Giorno</strong>: "+tratteNR[idTratta].slots[idSlot].time.day+"</font><br>"
+																			+"<font size='2'><strong>Orario partenza</strong>: "+tratteNR[idTratta].slots[idSlot].time.from+"</font><br>"
+																			+"<font size='2'><strong>Orario arrivo</strong>: "+tratteNR[idTratta].slots[idSlot].time.to+"</font><br>"
+																		+"</div>"
+																	+"</div>"
+																+"</center>"
+																+"<center>"
+																	+"<div class='col-md-2'>"
+																		+"<button class='btn btn-danger' onclick='cancellaPrenotazione(j-1)' style='margin-top:50%; float:right; margin-right:-15px;'>Elimina</button>"
+																	+"</div>"
+																+"</center>"
+															+"</div>"
+														+"</div>"
+													+"</div>"
+												+"</div>";
+						}
+					}
+				}
+			}
+			document.getElementById("Prenotazioni").innerHTML = eachPrenotazione;			
+		}
+		
+		//CANCELLA PRENOTAZIONE
+
+		function cancellaPrenotazione(j)			 // j è la prenotazione
+		{
+			//carico i dati dal localStorage
+			var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+			var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+			var regUsers = JSON.parse(localStorage.getItem("register"));
+			
+			//salvo l'utente loggato
+			var userLog;
+			for (i = 0; i < regUsers.length; i++)
+				if (regUsers[i].login == 1)
+					userLog=i;
+			
+			for(k = 0; k < tratteNR.length; k++)
+			{
+				//se l'id della tratta è uguale all'id tratta della prenotazione da cancellare
+				if (tratteNR[k].id == regUsers[userLog].prenotazione[j].idTratta)
+				{
+					var idSlot = regUsers[userLog].prenotazione[j].slot-1;
+					var idAereo = regUsers[userLog].prenotazione[j].modelloAereo-2;
+					
+					tratteNR[k].slots[idSlot].slotDisp += 1;					//incremento lo slot della prenotazione cancellata
+					regUsers[userLog].plane[idAereo].numero += 1;				//incremento numero aereo utilizzato nella prenotazione cancellata
+					
+					// rimuovo i valori con splice()
+					regUsers[userLog].prenotazione.splice(j-1,1); // splice (indice, quantità)
+
+					// salvo i dati nel localStorage
+					localStorage.register = JSON.stringify(regUsers);
+					localStorage.tratte = JSON.stringify(tratteNR);
+					
+					alert("Prenotazione cancellata con successo!");
+					location.reload();
+				}
+			}
+
+
+		}
+		</script>
+	</head>
+	
+	<body onload="stampaDatiUtente(); stampaPrenotazioni(); stampaNavbarRight()">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default">
+			<div>
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="img/plane.svg" width="25" height="25" class="d-inline-block align-top" alt="">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="nav-item">
+						<a class="nav-link" href="tratte.html">Tratte</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" id="navb">
+
+				</ul>					
+			</div>
+		</nav>
+
+		<div class='col-md-8'>
+			<div class='col-md-8'>
+				<div class='alert alert-warning'>
+					<h3>Le tue prenotazioni:</h3>						
+				</div>
+			</div>
+			
+			<div class="col-md-4">
+				<button type="submit" class="btn btn-block btn-success alert" onclick="window.location.href='tratte.html'">
+					<h3>Prenota tratta</h3>
+				</button>
+			</div>
+			
+			<div id="Prenotazioni"> </div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="pannello">
+				<div class="panel-heading clearfix">
+					<div id="compagnia"></div>
+				</div>
+
+				<div class="panel-body">
+					<div id="compInfo"></div>	
+					<hr style='border-top: 1px solid #337AB7'>	
+					<table class="table table-sm table-striped" style="margin-bottom:2px">
+						<thead>
+							<tr>
+								<th>Modello aereo</th>
+								<th><center>Disponibilità</center></th>
+								<th style='float:right'>Tipologia volo</th>
+							</tr>
+						</thead>
+						<tbody id="tbody"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

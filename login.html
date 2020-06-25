@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Login | ilVolo</title>
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- FAVICON -->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+		
+		<!-- CSS -->
+		<link rel="stylesheet" href="css/DidactGothic.css" >
+		<link rel="stylesheet" href="css/login.css">		
+		<link rel="stylesheet" href="css/bootstrap.css">
+		
+		<!-- JS -->
+		<script src="js/jQuery.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script>
+			//Inizializzo local storage
+			function inizializzaStorageUtenti()
+			{
+				if (typeof(localStorage.register) == "undefined")
+				{
+					localStorage.register="[]";
+				}
+			}
+			
+			//controllo se una compagnia è loggata e la reindirizzo alla pagina account
+			function checkLogin()
+			{
+				// caricamento dati dal localStorage
+				var regUsers = JSON.parse(localStorage.register);
+				
+				for (i=0;i<regUsers.length;i++)
+					if (regUsers[i].login==1)
+						window.location.href = "account.html";
+			}
+
+			//Se companyName e psw salvati sono uguali a quelli inseriti nel form
+			function checkDati(regUsers,dati)
+			{
+				if((regUsers.companyName==dati.companyName) && (regUsers.psw==dati.psw))
+					return true;
+				return false;
+			}
+
+			//Login compagnia aerea
+			function loginUtente()
+			{
+				var regUsers = JSON.parse(localStorage.register);	// caricamento dati dal localStorage
+				
+				var dati = {
+					companyName:document.loginForm.nome.value,
+					psw:document.loginForm.password.value
+				};
+
+				for(i=0;i<regUsers.length;i++)
+				{
+					if(checkDati(regUsers[i],dati))							// se i dati inseriti combaciano con un utente salvato nel local storage
+					{
+						regUsers[i].login = 1; 									// imposto il login a 1 cosi' so che e' dentro
+						localStorage.register = JSON.stringify(regUsers); 		// trasformo e invio al local storage
+						window.location.href = "account.html";					// reindirizzo alla pagina account.html
+						return true;											
+					}
+				}
+				
+				alert("Errore! I dati non sono corretti, sei sicuro/a di avere un account?");
+				return false;													// non faccio refresh
+			}
+		</script>
+	</head>
+	
+	<body onload="inizializzaStorageUtenti(); checkLogin()">
+	<!-- NAVBAR -->
+		<nav class="navbar navbar-default">
+			<div>
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="img/plane.svg" width="25" height="25" class="d-inline-block align-top" alt="">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="nav-item">
+						<a class="nav-link" href="tratte.html">Tratte</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a class="nav-link" href="register.html">Registrati</a>
+					</li>
+				</ul>	
+			</div>
+		</nav>
+		
+		<div class="col-md-4"></div>
+		<div class="col-md-4" style="margin-top:5%">
+			<div class="alert alert-success"><h3 class="titolo">Bentornato, Accedi</h3></div>
+			<div class="panel-body" id="pannelloReg">			
+				<div class="col-md-1"></div>			
+				<form method="post" name="loginForm" onSubmit="return loginUtente();">	
+					<div class="col-md-10">
+						<input type="text" name="nome" id="nome" class="form-control" style="margin-top:20px; margin-bottom:30px; width:100%; border-color: #337AB7;" placeholder="Nome compagnia" >
+								
+						<div class="input-group" style="margin-bottom:30px; width:100%; border-color: #337AB7;">
+							<input type="password" name="password" id="password" class="form-control pwd" style="border-color: #337AB7;" placeholder="Password" >
+							<div class="input-group-addon">
+								<i class="glyphicon glyphicon-eye-open reveal"></i>
+								<script>
+									$(".reveal").on('click',function(){
+										var $pwd = $(".pwd");
+										if ($pwd.attr('type') == 'password')		// se l'input type è password
+										{
+											$pwd.attr('type', 'text');				// lo trasformo in text
+											$(".reveal").removeClass("glyphicon glyphicon-eye-open").addClass("glyphicon glyphicon-eye-close");		// cambio la glyphicon
+										}
+										else	// faccio l'opposto
+										{
+											$pwd.attr('type', 'password');
+											$(".reveal").removeClass("glyphicon glyphicon-eye-close").addClass("glyphicon glyphicon-eye-open");
+										}
+									});
+								</script>
+							</div>
+						</div>	
+						
+						<button type="submit" id="btnLogin" class="btn btn-success btn-block" style="margin-bottom:10px">Accedi</button>
+						<script>
+							$("#btnLogin").on('click',function()
+							{	
+								var nome = $("#nome").val();
+								var password = $("#password").val();
+								
+								if(nome == "")
+								{
+									// rimuovo il placeholder, stampo "Nome mancante!" e modifico il colore del bordo
+									$("#nome.form-control").removeAttr('placeholder').val("Nome mancante!").css({"border-color": "#c30202","color": "#c30202"});
+									
+									// dopo due secondi rimetto tutto alle impostazioni iniziali
+									setTimeout(function(){
+									$("#nome.form-control").val("").attr('placeholder' , "Inserisci nome compagnia").css({"border-color": "#337AB7", "color": "#555"});		
+									},2000);
+								}
+								
+								if(password == "")
+								{
+									$("#password.form-control").attr('type', 'text').removeAttr('placeholder').val("Password mancante!").css({"border-color": "#c30202","color": "#c30202"});
+									setTimeout(function(){
+									$("#password.form-control").attr('type', 'password').val("").attr('placeholder' , "Inserisci password").css({"border-color": "#337AB7", "color": "#555"});		
+									},2000);
+								}
+							});
+						</script>
+						
+						<center>
+							<p class="notReg">Non sei registrato? <a href="register.html">Registrati</a></p>
+						</center>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

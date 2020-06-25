@@ -1,0 +1,233 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- FAVICON -->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+
+		<title>Modifica dati | ilVolo</title>
+		
+		<!-- CSS -->
+		<link rel="stylesheet" href="css/DidactGothic.css">
+		<link rel="stylesheet" href="css/change.css">
+		<link rel="stylesheet" href="css/bootstrap.css">	
+
+		<!-- JS -->
+		<script src="js/jQuery.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script type="text/javascript">
+			//NAVBAR
+			function stampaNavbarUtente()
+			{
+				var regUsers = JSON.parse(localStorage.register);
+				var n = new String("");
+				var loggato=false;
+			
+				for (i = 0; i < regUsers.length; i++)
+				{
+					if (regUsers[i].login == 1)
+					{
+						n+="<li class='nav-item'>"					
+								+"<a class='nav-link' style='pointer-events:none' class='btn btn-block btn-success'>Ciao, "+regUsers[i].companyName+"</a>"
+							+"</li>"
+							+"<li class='nav-item'>"
+								+"<a class='nav-link' href='account.html'>Il tuo account</a>"
+							+"</li>";
+						
+						loggato=true;
+					}
+				}
+				
+				if(loggato==false)
+				{
+					n+="<li class='nav-item'>"
+							+"<a class='nav-link' href='login.html'>Login</a>"
+						+"</li>"
+						+"<li class='nav-item'>"
+							+"<a class='nav-link' href='register.html'>Registrati</a>"
+						+"</li>";
+				}
+				
+				document.getElementById("navb").innerHTML = n;	
+			}
+			
+			function modificaDati()
+			{
+				var regUsers = JSON.parse(localStorage.register);
+				
+				//salvo l'utente loggato
+				var userLog;
+				for (i = 0; i < regUsers.length; i++)
+					if (regUsers[i].login == 1)
+						userLog=i;
+				
+				//creo variabili di supporto
+				var name="", pass="", naz="", val="", part="";
+				
+				//salvo i dati presi dal form
+				var nome = document.modForm.nameC.value;
+				var password = document.modForm.psw.value;
+				var nazione = document.modForm.nazione.value;
+				var valAz = document.modForm.val_az.value;
+				var partner = document.modForm.partner.value;
+				
+				for(i = 0; i < regUsers.length; i++)
+				{
+					if(i != userLog)
+					{	
+						//controllo che il nome inserito nel form non sia uguale ad un altro nel localstorage
+						if(regUsers[i].companyName == nome)
+						{
+							alert("Il nome che hai inserito corrisponde a quello di un'altra compagnia!");
+							return false;
+						}
+						else if(regUsers[i].companyName != nome && nome != "")	//se è diverso lo metto sul localStorage
+						{
+							name = nome;
+							regUsers[userLog].companyName = name;	
+						}
+					}
+				}	
+				
+				//se i valori sono diversi da null, li metto sul localstorage
+				if(password != "")
+					regUsers[userLog].psw = password;
+					
+				if(nazione != "")
+					regUsers[userLog].country = nazione;					
+					
+				if(valAz != "")
+					regUsers[userLog].valAz = valAz;
+					
+				if(partner != "")
+					regUsers[userLog].partner = partner;
+				
+				localStorage.register = JSON.stringify(regUsers);
+				window.location.href = "account.html";
+				return false;
+			}
+		</script>
+	</head>
+
+	<body onload="stampaNavbarUtente()">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default">
+			<div>
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="img/plane.svg" width="25" height="25" class="d-inline-block align-top" alt="">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="nav-item">
+						<a class="nav-link" href="tratte.html">Tratte</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" id="navb">
+				
+				</ul>	
+			</div>
+		</nav>
+	
+		<div class="col-md-2"></div>
+		<div class="col-md-4" style="margin-top:35px">
+			<div class="pannello" id="datiAttuali">
+				<script>
+					var regUsers = JSON.parse(localStorage.getItem("register"));
+					
+					var userLog;
+					for (i = 0; i < regUsers.length; i++)
+						if (regUsers[i].login==1)
+							userLog = i;
+					
+					var ast = new String("");
+					for(i = 0; i < regUsers[userLog].psw.length; i++)
+						ast+="*";
+
+					// variabili che mi serviranno durante la funzione
+					var datiAttuali = new String("<div class='alert alert-info'><h3 class='titolo'>Dati attuali:</h3></div>");
+					
+					datiAttuali+=""
+						+"<div class='panel-body' id='pannelloDati'>"
+							+"<p style='margin-bottom:0'>Nome: </p><h3 style='padding-left:20px; padding-bottom:10px'><strong>"+regUsers[userLog].companyName+"</strong></h3>"
+							+"<p style='margin-bottom:0'>Password: </p><h3 style='padding-left:20px; padding-bottom:10px'><strong>"+ast+"</strong></h3>"
+							+"<p style='margin-bottom:0'>Nazione: </p><h3 style='padding-left:20px; padding-bottom:10px'><strong>"+regUsers[userLog].country+"</strong></h3>"
+							+"<p style='margin-bottom:0'>Valore azionario: </p><h3 style='padding-left:20px; padding-bottom:10px'><strong>€ "+regUsers[userLog].valAz+" per azione</strong></h3>"
+							+"<p style='margin-bottom:0'>Partner: </p><h3 style='padding-left:20px; padding-bottom:12px'><strong>"+regUsers[userLog].partner+"</strong></h3>"
+						+"</div>";
+					
+					document.getElementById("datiAttuali").innerHTML = datiAttuali;
+				</script>		
+				
+				<button type="submit" style="margin-top:10px" onclick="location.href='account.html'" class="btn btn-danger btn-block">Annulla modifica</button>
+			</div>
+		</div>
+	
+		<div class="col-md-4" style="margin-top:35px">
+			<form role="form" name="modForm" method="post" onSubmit="return modificaDati();">
+				<div class="pannello" style="margin-bottom:10px">
+					<div class="alert alert-success"><h3 class="titolo">Modifica dati:</h3></div>					
+					<div class="panel-body" id="pannelloDati">
+						<p style='margin-bottom:0'>Nome: </p>
+						<center>
+							<div class="row">
+								<input type="text" name="nameC" class="form-control input-sm" style="margin-bottom:8px; width:75%" placeholder="Inserisci nome compagnia">
+							</div>
+						</center>
+						<p style='margin-bottom:0'>Password: </p>
+						<center>
+							<div class="row">
+								<input type="password" name="psw" class="form-control input-sm" style="margin-bottom:8px; width:75%" placeholder="Inserisci password">
+							</div>
+						</center>
+						<p style='margin-bottom:0'>Nazione: </p>
+						<center>
+							<div class="row">
+								<input type="text" name="nazione" class="form-control input-sm" style="margin-bottom:8px; width:75%" placeholder="Inserisci nazione">
+							</div>
+						</center>
+						<p style='margin-bottom:0'>Valore azionario: </p>
+						<center>
+							<div class="row">
+								<input type="number" name="val_az" class="form-control input-sm" min="0" step="0.01" style="margin-bottom:8px; width:75%" placeholder="Inserisci valore azionario">
+							</div>
+						</center>
+						<p style='margin-bottom:0'>Partner: </p>
+						<center>
+							<div class="row">
+								<input type="text" name="partner" class="form-control input-sm" style="width:75%" placeholder="Inserisci partner">
+							</div>
+						</center>
+					</div>					
+				</div>
+				<button type="submit" class="btn btn-success btn-block">Conferma modifica</button>
+			</form>
+		</div>
+	</body>
+</html>

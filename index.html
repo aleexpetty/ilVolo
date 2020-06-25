@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Index | ilVolo</title>
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- FAVICON -->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+		
+		<!-- CSS -->
+		<link rel="stylesheet" href="css/DidactGothic.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<link rel="stylesheet" href="css/index.css">
+		
+		<!-- JS -->
+		<script src="js/jQuery.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script src="json/tratte.json"></script>
+		<script>
+			// Inizializzo local storage delle compagnie
+			function inizializzaStorageUtenti(){
+				if (typeof(localStorage.register) == "undefined"){
+					localStorage.register="[]";
+				}
+			}
+			
+			// Inizializzo local storage tratte e aerei
+			function inizializzaStorageAerei()
+			{
+				if (typeof(localStorage.tratte) == "undefined")
+				{
+					localStorage.tratte="[]";
+					localStorage.setItem("tratte", JSON.stringify(tratte));  
+				}
+			
+				if (typeof(localStorage.aerei) == "undefined")
+				{
+					localStorage.aerei="[]";
+					localStorage.setItem("aerei", JSON.stringify(aerei));  
+				}
+			}
+				
+			// Navbar
+			function stampaNavbarUtente()
+			{
+				var regUsers = JSON.parse(localStorage.register);
+				var n = new String("");	
+				var loggato=false;
+				
+				for (i = 0; i < regUsers.length; i++)
+				{
+					if (regUsers[i].login == 1)
+					{
+						n+="<li class='nav-item'>"					
+								+"<a class='nav-link' style='pointer-events:none' class='btn btn-block btn-success'>Ciao, "+regUsers[i].companyName+"</a>"
+							+"</li>"
+							+"<li class='nav-item'>"
+								+"<a class='nav-link' href='account.html'>Il tuo account</a>"
+							+"</li>";
+						
+						loggato=true;
+					}
+				}
+				
+				if(loggato==false)
+				{
+					n+="<li class='nav-item'>"
+							+"<a class='nav-link' href='login.html'>Login</a>"
+						+"</li>"
+						+"<li class='nav-item'>"
+							+"<a class='nav-link' href='register.html'>Registrati</a>"
+						+"</li>";
+
+				}
+				
+				document.getElementById("navb").innerHTML = n;
+			}
+		</script>
+	</head>
+	
+	<body onload="inizializzaStorageUtenti(); stampaNavbarUtente(); inizializzaStorageAerei();">
+		<nav class="navbar navbar-default">
+			<div>
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="img/plane.svg" width="25" height="25" class="d-inline-block align-top" alt="">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="nav-item">
+						<a class="nav-link" href="tratte.html">Tratte</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" id="navb">
+
+				</ul>	
+			</div>
+		</nav>
+
+		<div class="col-md-12" style="margin-top:40px">
+			<center>
+			<h2>Benvenuto su <strong>Il Volo</strong></h2><br>
+			<h4>
+				Il Volo è un'applicazione web per la gestione di un aeroporto.<br>
+				Su questo sito è possibile effettuare le seguenti operazioni:		
+			</h4>
+			</center>
+		</div>
+		
+		<div class="col-md-12">
+			<div class="col-md-2"></div>
+			<div class="col-md-4">
+				<div class="box" style="margin-bottom:30px">							
+					<div class="icon">
+						<div class="image"><i class="glyphicon glyphicon-list"></i></div>
+						<div class="info">
+							<h3 class="title">Visualizzare le tratte</h3>
+						</div>
+					</div>
+				</div> 
+			</div>
+			
+			<div class="col-md-4">
+				<div class="box" style="margin-bottom:30px">							
+					<div class="icon">
+						<div class="image"><i class="glyphicon glyphicon-search"></i></div>
+						<div class="info">
+							<h3 class="title">Effettuare una ricerca sulle tratte</h3>
+						</div>
+					</div>
+				</div> 
+			</div>
+		</div>
+		
+		<div class="col-md-12">
+			<div class="col-md-2"></div>
+			<div class="col-md-4">
+				<div class="box">							
+					<div class="icon">
+						<div class="image"><i class="glyphicon glyphicon-check"></i></div>
+						<div class="info">
+							<h3 class="title">Prenotare o cancellare tratte</h3>
+						</div>
+					</div>
+					<div class="space"></div>
+				</div> 
+			</div>
+			
+			<div class="col-md-4">
+				<div class="box">							
+					<div class="icon">
+						<div class="image"><i class="glyphicon glyphicon-wrench"></i></div>
+						<div class="info">
+							<h3 class="title">Gestire il tuo account</h3>
+						</div>
+					</div>
+					<div class="space"></div>
+				</div> 
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+	
+		<!-- FAVICON -->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Tratte | ilVolo</title>
+
+		<!-- CSS -->
+		<link href="css/DidactGothic.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/tratte.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
+		
+		<!-- JS -->
+		<script src="js/jQuery.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script type="text/javascript">		
+		//NAVBAR
+		function stampaNavbarRight()
+		{
+			var regUsers = JSON.parse(localStorage.register);
+			var n = new String("");
+			var loggato=false;
+			
+			for (i = 0; i < regUsers.length; i++)
+			{
+				if (regUsers[i].login == 1)
+				{
+					n+="<li class='nav-item'>"					
+							+"<a class='nav-link' style='pointer-events:none' class='btn btn-block btn-success'>Ciao, "+regUsers[i].companyName+"</a>"
+						+"</li>"
+						+"<li class='nav-item'>"
+							+"<a class='nav-link' href='account.html'>Il tuo account</a>"
+						+"</li>";
+					
+					loggato=true;
+				}
+			}
+			
+			if(loggato==false)
+			{
+				n+="<li class='nav-item'>"
+						+"<a class='nav-link' href='login.html'>Login</a>"
+					+"</li>"
+					+"<li class='nav-item'>"
+						+"<a class='nav-link' href='register.html'>Registrati</a>"
+					+"</li>";
+			}
+			
+			document.getElementById("navb").innerHTML = n;	
+		}
+		
+		function clearSessionStorage()
+		{
+			sessionStorage.clear();
+		}
+		
+		function effettuaPrenotazione(i)
+		{
+			sessionStorage.setItem('IdBook', i);
+			window.location.href="book.html";
+		}
+		
+		function viewPlane(i)
+		{
+			sessionStorage.setItem('IdPlane', i);
+			window.location.href="aereo.html";
+		}
+		
+		function inizializzaTratte()
+		{
+			
+			//carico i dati dal localStorage
+			var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+			var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+			var regUsers = JSON.parse(localStorage.getItem("register"));
+			
+			var userLog;
+			for (i = 0; i < regUsers.length; i++)
+				if (regUsers[i].login == 1)
+					userLog=i;
+		
+			var eachTratta = new String("<div class='col-md-12'><div class='alert alert-warning'><h3 class='titolo'>Elenco tratte:</h3></div></div>");									
+			
+			for (i = 0; i < tratteNR.length; i++) 
+			{		
+				eachTratta+="<div class='col-md-12'>"
+								+"<div class='pannello'>"
+									+"<div class='panel-heading'>"
+										+"<h3 class='panel-title'>"
+											+"<strong>"+tratteNR[i].name+"</strong>"
+										+"</h3>"
+									+"</div>"
+									+"<div class='panel-body'>"
+										+"<div class='row'>"
+											+"<div class='col-md-8'>"
+												+"<font size='4'><strong>"+tratteNR[i].from+"&emsp;<img src='img/flight2.svg' width='70' height='35'> &emsp;"+tratteNR[i].to+"</strong></font>"	
+											+"</div>"	
+											+"<div class='col-md-4'>";
+											if(userLog != null)
+											{
+												if(regUsers[userLog].login == 1)
+													eachTratta+="<button style='float:right' onclick='effettuaPrenotazione("+i+");' class='btn btn-success btn-sm'>Prenota tratta</button>";
+											}
+											else
+												eachTratta+="<button style='float:right' data-toggle='tooltip' data-placement='left' title='Accedi per prenotare!' disabled onclick='effettuaPrenotazione("+i+");' class='btn btn-success btn-sm'>Prenota tratta</button>";												
+								eachTratta+="</div>"
+										+"</div>"
+										+"<div class='row' style='margin-bottom:8px'>"
+											+"<div class='col-md-12'>"
+												+"<img src='img/two-flags.svg' width='30' height='30' title='Tipologia volo'>&emsp;"
+												+"<font size='3' style='vertical-align:middle'>"+tratteNR[i].type+"</font>"
+											+"</div>"
+										+"</div>"
+										+"<div class='row'>"
+											+"<div class='col-12 col-md-8'>"
+												+"<img src='img/worldwide.svg' width='30' height='30' title='Aerei compatibili'>&emsp;"
+												+"<font size='3' style='vertical-align:middle'>";
+													for(a = 0; a < aereiDisp.length; a++)
+													{
+														for(b = 0; b < tratteNR[i].accepted_plane.length; b++)
+														{
+															if(aereiDisp[a].id == tratteNR[i].accepted_plane[b])
+															{
+																eachTratta+="<a onclick='viewPlane("+aereiDisp[a].id+");' style='cursor:pointer'>"+aereiDisp[a].name+"</a>";
+																if(b == tratteNR[i].accepted_plane.length-1)
+																	eachTratta+="";
+																else
+																	eachTratta+=", &emsp;";
+															}
+														}
+													}
+									eachTratta+="</font>"	
+											+"</div>"
+											+"<div class='col-md-4'>"
+												+"<button style='float:right' id='espandi' class='btn btn-info btn-sm espandi' aria-expanded='false' data-toggle='collapse' data-target='#demo"+i+"'>"
+													+"<span class='collapsed'>Visualizza dettagli</span>"
+													+"<span class='expanded'>Nascondi dettagli</span>"
+												+"</button>"
+											+"</div>"
+										+"</div>"
+										+"<div class='col-md-12 collapse' id='demo"+i+"'>"
+											+"<hr style='border-top: 1px solid #337AB7'>";									
+											for(j = 0; j < tratteNR[i].slots.length; j++)
+											{
+												eachTratta+="<center>"
+																+"<div class='col-md-4'>"
+																	+"<div class='panel-heading slots'>"
+																		+"<h3 class='panel-title'>"
+																			+"<strong>Slot "+tratteNR[i].slots[j].slot+"</strong>"
+																		+"</h3>"
+																	+"</div>"
+																	+"<div class='panel-body slotBody'>"
+																		+"<font size='2'><strong>Giorno</strong>: "+tratteNR[i].slots[j].time.day+"</font><br>"
+																		+"<font size='2'><strong>Orario partenza</strong>: "+tratteNR[i].slots[j].time.from+"</font><br>"
+																		+"<font size='2'><strong>Orario arrivo</strong>: "+tratteNR[i].slots[j].time.to+"</font><br>"
+																	+"</div>"
+																+"</div>"
+															+"</center>";
+											}			
+							eachTratta+="</div>"
+									+"</div>"
+								+"</div>"
+							+"</div>";
+							
+			}
+			document.getElementById("tratteNonReg").innerHTML = eachTratta;
+		}
+		
+		function cercaTratta()
+		{
+			if(true)
+			{						
+				//Città
+				var City = new String("");
+				City += document.cercatratte.Partenza.value;
+				
+				//Aereo
+				var Plane = new String("");
+				Plane += document.cercatratte.TipoAereo.value;
+				
+				//Tipologia
+				var Type = new String("");
+				Type += document.cercatratte.Tipologia.value;				
+						
+			    // caricamento dati dal localStorage
+				var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+				var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+				var regUsers = JSON.parse(localStorage.getItem("register"));
+				
+				//Salvo l'utente loggato
+				var userLog;
+				for (i = 0; i < regUsers.length; i++)
+					if (regUsers[i].login == 1)
+						userLog=i;
+				
+				// variabili che mi serviranno durante la funzione per city, plane, type e per controllare se trovo risultati
+				var c, p, t, controllo=false;
+				var risultato = new String("<div class='col-md-12'><div class='alert alert-success'><h3 class='titolo'>Risultati ricerca:</h3></div></div>");
+				
+				for (i = 0; i < tratteNR.length; i++)
+				{
+					c = true; // City
+					p = true; // Plane
+					t = true; // Type
+					
+					// controllo se l'utente ha inserito qualcosa nel campo partenza
+					if(document.cercatratte.Partenza.value == "")
+						City = true;
+					else
+						City = document.cercatratte.Partenza.value;
+						
+					if(document.cercatratte.TipoAereo.value == "")
+						Plane = true;
+					else
+						Plane = document.cercatratte.TipoAereo.value;
+						
+					if(document.cercatratte.Tipologia.value == "")
+						Type = true;
+					else
+						Type = document.cercatratte.Tipologia.value;
+						
+					// se l'utente ha inserito qualcosa, controllo che sia uguale al campo in posizione i
+					//effettua la ricerca ignorando la distinzione tra maiuscole e minuscole (i) e esegue una ricerca globale (g)
+					//test controlla se il valore di RegExp corrisponde a quello tra ()
+					if (City!=true)
+						c = (RegExp(City, "ig").test(tratteNR[i].from) | RegExp(City, "ig").test(tratteNR[i].to));
+					
+					if (Plane!=true)
+						p = RegExp(Plane, "ig").test(tratteNR[i].accepted_plane);
+					
+					if (Type!=true)
+						t = RegExp(Type, "g").test(tratteNR[i].type);		
+																
+					// se tutti i valori sono veri, allora stampo le tratte
+					if (City && c && Plane && p && Type && t)
+					{
+						risultato+="<div class='col-md-12'>"
+										+"<div class='pannello'>"
+											+"<div class='panel-heading'>"
+												+"<h3 class='panel-title'>"
+													+"<strong>"+tratteNR[i].name+"</strong>"
+												+"</h3>"
+											+"</div>"
+											+"<div class='panel-body'>"
+												+"<div class='row'>"
+													+"<div class='col-md-8'>"
+														+"<font size='4'><strong>"+tratteNR[i].from+"&emsp;<img src='img/flight2.svg' width='70' height='35'> &emsp;"+tratteNR[i].to+"</strong></font>"	
+													+"</div>"
+													+"<div class='col-md-4'>";
+														if(regUsers[userLog].login == 1)
+															risultato+="<button style='float:right' onclick='effettuaPrenotazione("+i+");' class='btn btn-success btn-sm'>Prenota tratta</button>";
+														else
+															risultato+="<button style='float:right' data-toggle='tooltip' data-placement='left' title='Accedi per prenotare!' disabled onclick='effettuaPrenotazione("+i+");' class='btn btn-success btn-sm'>Prenota tratta</button>";
+										risultato+="</div>"
+												+"</div>"
+												+"<div class='row' style='margin-bottom:8px'>"
+													+"<div class='col-md-12'>"
+														+"<img src='img/two-flags.svg' width='30' height='30'>&emsp;"
+														+"<font size='3' style='vertical-align:middle'>"+tratteNR[i].type+"</font>"
+													+"</div>"
+												+"</div>"
+												+"<div class='row'>"
+													+"<div class='col-12 col-md-8'>"
+														+"<img src='img/worldwide.svg' width='30' height='30'>&emsp;"
+														+"<font size='3' style='vertical-align:middle'>";
+														for(a = 0; a < aereiDisp.length; a++)
+														{
+															for(b = 0; b < tratteNR[i].accepted_plane.length; b++)
+															{
+																if(aereiDisp[a].id == tratteNR[i].accepted_plane[b])
+																{
+																	risultato+="<a onclick='viewPlane("+aereiDisp[a].id+");' style='cursor:pointer'>"+aereiDisp[a].name+"</a>";
+																	if(b == tratteNR[i].accepted_plane.length-1)
+																		risultato+="";
+																	else
+																		risultato+=", &emsp;";
+																}
+															}
+														}
+											risultato+="</font>"
+													+"</div>"
+													+"<div class='col-md-4'>"
+														+"<button style='float:right' id='espandi' class='btn btn-info btn-sm espandi' aria-expanded='false' data-toggle='collapse' data-target='#demo"+i+"'>"
+															+"<span class='collapsed'>Visualizza dettagli</span>"
+															+"<span class='expanded'>Nascondi dettagli</span>"
+														+"</button>"
+													+"</div>"
+												+"</div>"
+													+"<div class='col-md-12 collapse' id='demo"+i+"'>"
+														+"<hr style='border-top: 1px solid #337AB7'>";
+													+"</div>"
+												+"<hr>"
+												+"<div class='col-md-12'>";											
+													for(j = 0; j < tratteNR[i].slots.length; j++)
+													{
+														risultato+="<center>"
+																		+"<div class='col-md-4'>"
+																			+"<div class='panel-heading slots'>"
+																				+"<h3 class='panel-title'>"
+																					+"<strong>Slot "+tratteNR[i].slots[j].slot+"</strong>"
+																				+"</h3>"
+																			+"</div>"
+																			+"<div class='panel-body slotBody'>"
+																				+"<font size='2'><strong>Giorno</strong>: "+tratteNR[i].slots[j].time.day+"</font><br>"
+																				+"<font size='2'><strong>Orario partenza</strong>: "+tratteNR[i].slots[j].time.from+"</font><br>"
+																				+"<font size='2'><strong>Orario arrivo</strong>: "+tratteNR[i].slots[j].time.to+"</font><br>"
+																			+"</div>"
+																		+"</div>"
+																	+"</center>";
+													}		
+									risultato+="</div>"
+										+"</div>"
+									+"</div>"
+								+"</div>";						
+													
+						controllo=true;		//setto la variabile a false perchè ho trovato delle tratte compatibili				
+					}
+				}
+					
+				if(controllo == false)			//se non ho trovato tratte compatibili
+				{
+					risultato+="<div class='col-md-12'><div class='alert alert-danger'><h5 class='titolo'>Nessun risultato trovato.</h5></div></div>";
+				}
+
+				document.getElementById("tratteNonReg").innerHTML = risultato;
+
+				return false;
+			}			
+			else 
+			{
+				return true;
+			}
+		}
+		</script>
+	</head>
+	
+	<body onload="clearSessionStorage(); inizializzaTratte(); stampaNavbarRight()">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default">
+			<div>
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="img/plane.svg" width="25" height="25" class="d-inline-block align-top" alt="">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right" id="navb">
+
+				</ul>	
+			</div>
+		</nav>
+		
+		<div class="col-12 col-md-8" id="tratteNonReg">
+		</div>
+		<div class="col-md-4 offset-md-4">
+			<div class="alert alert-info"><h3 class="titolo">Ricerca tratta:</h3></div>
+			<div >
+				<div class="pannello">
+					<div class="panel-body" id="cerca">
+						<form action="" method="post" name="cercatratte" onSubmit="return cercaTratta();" accept-charset="utf-8">
+							<label>Filtra per città:</label>
+							<center>
+								<div class="row">
+									<input type="text" name="Partenza" class="form-control" style="margin-bottom:10px; width:75%" placeholder="Inserisci città">
+								</div>
+							</center>
+							
+							<label style="margin-bottom:5px">Filtra per tipologia aereo:</label>
+							<center>
+								<select class="form-control" name="TipoAereo" style="margin-bottom:10px; width:81%">
+									<option value="" disabled selected>Seleziona aereo</option>
+									<option value="2">Boeing 767-300</option>
+									<option value="3">Boeing 737-800</option>
+									<option value="4">Boeing 777</option>
+									<option value="5">Airbus A380</option>
+									<option value="6">Airbus A340</option>
+								</select>
+							</center>
+							
+							<label style="margin-bottom:0">Filtra per tipologia tratta:</label>
+							<center>
+								<input type="radio" name="Tipologia" value="Internazionale" autocomplete="off"> Internazionale &emsp;&emsp;
+								<input type="radio" name="Tipologia" value="Nazionale" autocomplete="off"> Nazionale
+							</center>
+
+							<div class="col-md-12">
+								<div class="col-md-6">
+									<button type="submit" style="margin-top:10px" onclick="cercaTratta();" class="btn btn-success btn-block">Cerca</button>
+								</div>
+						</form>
+								<div class="col-md-6">
+									<form method="post" name="annulla" onsubmit="return stampaRistoranti();" >
+										<button type='submit' style="margin-top:10px" class='btn btn-block btn-danger'>Annulla</button>
+									</form> 
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

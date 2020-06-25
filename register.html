@@ -1,0 +1,317 @@
+<html>
+	<head>
+		<title>Registrazione | ilVolo</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- FAVICON -->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+		
+		<!-- CSS -->
+		<link rel="stylesheet" href="css/register.css">
+		<link rel="stylesheet" href="css/DidactGothic.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<link rel="stylesheet" href="css/fontAwesome.css">
+
+		<!-- JS -->
+		<script src="js/jQuery.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script>
+			function checkLogin()
+			{
+				// caricamento dati dal localStorage
+				var regUsers = JSON.parse(localStorage.register);
+				
+				for (i=0;i<regUsers.length;i++)
+					if (regUsers[i].login==1)
+						window.location.href = "account.html";
+			}
+			
+			// Se il nome della compagnia è uguale
+			function checkNome(regUsers,dati){
+				if (regUsers.companyName==dati.companyName)
+					return true;
+				return false;
+			}
+	
+			// Registrazion compagnia
+			function registrazioneUtente(){	
+				
+				// caricamento dati dal localStorage
+				var regUsers = JSON.parse(localStorage.register);
+				
+				var numId;
+				if(regUsers.length == 0)
+					numId=0;
+				else
+				{
+					numId = regUsers.length;
+				}
+				
+				// dati form
+				var dati={
+					login:1, // quando si registra e' automaticamente loggato
+					idCompany:numId,
+					companyName:document.regForm.nome.value,	//nome che apparirà nel localstorage : document : name form : name input dell'oggetto : value,
+					psw:document.regForm.password.value,
+					country:document.regForm.nazione.value,
+					valAz:document.regForm.val_az.value,
+					partner:document.regForm.partner.value,
+					plane:	[								
+								{"id":1, "aereo":"Boeing 767-300","numero":Number(document.regForm.num2.value),"tipologia":"Internazionale"},
+								{"id":2, "aereo":"Boeing 737-800","numero":Number(document.regForm.num3.value),"tipologia":"Nazionale"},
+								{"id":3, "aereo":"Boeing 777","numero":Number(document.regForm.num4.value),"tipologia":"Internazionale"},
+								{"id":4, "aereo":"Airbus A380","numero":Number(document.regForm.num5.value),"tipologia":"Internazionale"},
+								{"id":5, "aereo":"Airbus A340","numero":Number(document.regForm.num6.value),"tipologia":"Nazionale"}	
+							],
+					prenotazione: []
+				};
+				
+				// controllo se l'utente e' gia' inserito
+				for(i=0;i<regUsers.length;i++){
+					if(checkNome(regUsers[i],dati)){
+						alert("Errore! Compagnia già presente nel sistema!");
+						return false;
+					}			
+				}
+
+				// metto i dati nell'ultima posizione
+				regUsers[regUsers.length] = dati;
+				
+				var userLog;
+				for (i = 0; i < regUsers.length; i++)
+					if (regUsers[i].login==1)
+						userLog = i;		
+				
+				//conto le righe con quantità = 0
+				var c = 0;				
+				for(i = regUsers[userLog].plane.length-1; i>=0; i--)
+					if(regUsers[userLog].plane[i].numero == 0)
+					{
+						c+=1;										//incremento un contatore
+					}
+					
+				//se gli aerei == 0 sono < e diversi da 5
+				if(c != 5 && c<5)
+				{
+					// salvo i dati nel localStorage
+					localStorage.register = JSON.stringify(regUsers);
+					alert("Registrazione effettuata! Verrai reindirizzato al tuo account");
+					window.location.href = "account.html";
+
+					return true;
+				}
+				else	//sennò stampo errore
+				{
+					alert("Inserisci almeno un aereo!");
+					return false;
+				}
+			}
+			
+		</script>
+	</head>
+
+	<body onload="checkLogin();"> 
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default">
+			<div>
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="img/plane.svg" width="25" height="25" class="d-inline-block align-top" alt="">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			  <ul class="nav navbar-nav navbar-left">
+					<li class="nav-item">
+						<a class="nav-link" href="tratte.html">Tratte</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a class="nav-link" href="login.html">Login</a>
+					</li>
+				</ul>	
+			</div>
+		</nav>
+
+			
+		<div class="col-md-2"></div>
+		<form role="form" name="regForm" id="regForm" method="post" onSubmit="return registrazioneUtente();">
+			<div class="col-md-4" style="margin-top:35px">
+				<div class="pannello" style="margin-bottom:10px">
+					<div class="alert alert-info"><h3 class="titolo">Informazioni compagnia:</h3></div>		
+					<div class="panel-body" id="pannelloReg" style="height:350px">
+						<p style='margin-bottom:0'>Nome: </p>
+						<center>
+							<input type="text" name="nome" id="nome" class="form-control" style="margin-bottom:8px; width:75%; border-color: #337AB7;" placeholder="Inserisci nome compagnia" autocomplete="off">
+						</center>
+						
+						<p style='margin-bottom:0'>Password: </p>
+						<center>
+							<div class="input-group" style="margin-bottom:8px; width:75%; border-color: #337AB7;">
+								<input type="password" name="password" id="password" class="form-control pwd" style="border-color: #337AB7;" placeholder="Inserisci password">
+								<div class="input-group-addon">
+									<i class="glyphicon glyphicon-eye-open reveal"></i>
+								<script>
+									$(".reveal").on('click',function()
+									{
+										var $pwd = $(".pwd");
+										if ($pwd.attr('type') === 'password')		// se l'input type è password
+										{
+											$pwd.attr('type', 'text');				// lo trasformo in text
+											$(".reveal").removeClass("glyphicon glyphicon-eye-open").addClass("glyphicon glyphicon-eye-close");		// cambio la glyphicon
+										}
+										else
+										{
+											$pwd.attr('type', 'password');
+											$(".reveal").removeClass("glyphicon glyphicon-eye-close").addClass("glyphicon glyphicon-eye-open");
+										}
+									});
+								</script>
+								</div> 
+							
+
+							</div>
+						</center>
+						
+						<p style='margin-bottom:0'>Nazione: </p>
+						<center>
+							<input type="text" name="nazione" id="nazione" class="form-control" placeholder="Inserisci nazione" style="margin-bottom:8px; width:75%; border-color: #337AB7;" autocomplete="false">
+						</center>
+						
+						<p style='margin-bottom:0'>Valore azionario: </p>
+						<center>
+							<input type="number" class="form-control" id="val_az" min="0" step="0.01" name="val_az" style="margin-bottom:8px; width:75%; border-color: #337AB7;" placeholder="Inserisci valore azionario" autocomplete="false">
+						</center>
+						
+						<p style='margin-bottom:0'>Partner: </p>
+						<center>
+							<input type="text" name="partner" id="partner" class="form-control" placeholder="Inserisci partner" style="margin-bottom:8px; width:75%; border-color: #337AB7;" autocomplete="off">
+						</center>						
+					</div>
+				</div>
+				<a id="toStep2" style="float:right" class="btn btn-primary btn-sm">Avanti</a>
+				<script>
+					//Quando clicco il bottone
+					$("#toStep2").on('click',function()
+					{	
+						//Salvo i valori degli input
+						var nome = $("#nome").val();
+						var password = $("#password").val();
+						var nazione = $("#nazione").val();
+						var val_az = $("#val_az").val();
+						var partner = $("#partner").val();
+						
+						//Se l'input è uguale a NULL
+						if(nome == "")
+						{
+							//effettuo trasformazione CSS e dopo 2 sec lo riporto alla situazione iniziale
+							$("#nome.form-control").removeAttr('placeholder').val("Nome mancante!").css({"border-color": "#c30202","color": "#c30202"});
+							setTimeout(function(){
+							$("#nome.form-control").val("").attr('placeholder' , "Inserisci nome compagnia").css({"border-color": "#337AB7", "color": "#555"});		
+							},2000);
+						}
+						
+						if(password == "")
+						{
+							$("#password.form-control").attr('type', 'text').removeAttr('placeholder').val("Password mancante!").css({"border-color": "#c30202","color": "#c30202"});
+							setTimeout(function(){
+							$("#password.form-control").attr('type', 'password').val("").attr('placeholder' , "Inserisci password").css({"border-color": "#337AB7", "color": "#555"});		
+							},2000);
+						}
+						
+						if(nazione == "")
+						{
+							$("#nazione.form-control").removeAttr('placeholder').val("Nazione mancante!").css({"border-color": "#c30202","color": "#c30202"});
+							setTimeout(function(){
+							$("#nazione.form-control").val("").attr('placeholder' , "Inserisci nazione").css({"border-color": "#337AB7", "color": "#555"});		
+							},2000);
+						}
+						
+						if(val_az == "")
+						{
+							$("#val_az.form-control").attr('type', 'text').removeAttr('placeholder').val("Valore azionario mancante!").css({"border-color": "#c30202","color": "#c30202"});
+							setTimeout(function(){
+							$("#val_az.form-control").attr('type', 'number').val("").attr('placeholder' , "Inserisci valore azionario").css({"border-color": "#337AB7", "color": "#555"});		
+							},2000);
+						}
+						
+						if(partner == "")
+						{
+							$("#partner.form-control").removeAttr('placeholder').val("Partner mancante!").css({"border-color": "#c30202","color": "#c30202"});
+							setTimeout(function(){
+							$("#partner.form-control").val("").attr('placeholder' , "Inserisci partner").css({"border-color": "#337AB7", "color": "#555"});		
+							},2000);
+						}
+						
+						if(nome!="" && password!="" && nazione!="" && val_az!="" && partner!="")
+							$('#step2').css('display', '');
+					});
+				</script>
+			</div>
+			
+			<div class="col-md-4" id="step2" style="display:none; margin-top:35px">
+				<div class="pannello" style="margin-bottom:10px">
+					<div class="alert alert-info"><h3 class="titolo">La tua flotta:</h3></div>					
+					<div class="panel-body" id="pannelloReg" style="height:350px">
+						<br>
+						<table class="table table-sm table-hover">
+							<thead>
+								<td><strong>Modello aereo</strong></td>
+								<td><center><strong>Numero</strong></center></td>
+							</thead>
+							<tbody id="tab">
+								<script>
+									var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+									var aereo = new String("");
+
+									//Per ogni aereo nel localStorage stampo nome e un input per la quantità
+									for(i = 0; i < aereiDisp.length; i++)
+									{
+									aereo+=""
+											+"<tr title='"+aereiDisp[i].tipologia+"'>"
+												+"<td>"+aereiDisp[i].name+"</td>"
+												+"<td>"
+													+"<center>"
+														+"<input type='number' id='num"+aereiDisp[i].id+"' name='num"+aereiDisp[i].id+"' value='0' min='0' style='width:70px' class='form-control text-center input-sm'>"
+													+"</center>"
+												+"</td>"
+											+"</tr>";
+									}
+									document.getElementById("tab").innerHTML = aereo;
+								</script>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<button type="submit" style="float:right" id="complete" class="btn btn-success btn-sm">Completa registrazione</button>
+			</div>
+		</form>
+			
+
+	</body>
+</html>

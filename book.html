@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+
+		<!-- FAVICON -->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Prenotazione | ilVolo</title>
+
+		<!-- CSS -->
+		<link rel="stylesheet" href="css/DidactGothic.css">
+		<link rel="stylesheet" href="css/book.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<!-- JS -->
+		<script src="js/jQuery.js"></script>
+		<script src="js/list-group.js"></script>	<!-- pannelli slot -->
+		<script src="js/bootstrap.js"></script>
+		<script type="text/javascript">		
+		//NAVBAR
+		function stampaNavbarRight()
+		{
+			var regUsers = JSON.parse(localStorage.register);
+			var n = new String("");
+			var loggato=false;
+			
+			for (i = 0; i < regUsers.length; i++)
+			{
+				if (regUsers[i].login == 1)
+				{
+					n+="<li class='nav-item'>"					
+							+"<a class='nav-link' style='pointer-events:none' class='btn btn-block btn-success'>Ciao, "+regUsers[i].companyName+"</a>"
+						+"</li>"
+						+"<li class='nav-item'>"
+							+"<a class='nav-link' href='account.html'>Il tuo account</a>"
+						+"</li>";
+					
+					loggato=true;
+				}
+			}
+			
+			if(loggato==false)
+			{
+				n+="<li class='nav-item'>"
+						+"<a class='nav-link' href='login.html'>Login</a>"
+					+"</li>"
+					+"<li class='nav-item'>"
+						+"<a class='nav-link' href='register.html'>Registrati</a>"
+					+"</li>";
+
+			}
+			
+			document.getElementById("navb").innerHTML = n;	
+		}
+		
+		// Estraggo l'ID della tratta da stampare
+		function getID() {
+			var a = sessionStorage.getItem('IdBook');
+			stampaTratta(a[0]);
+		}
+		
+		//STAMPA AEREI
+		function stampaAerei()
+		{
+			// caricamento dati dal localStorage
+			var regUsers = JSON.parse(localStorage.register);
+			
+			var userLog;
+			for (i = 0; i < regUsers.length; i++)
+				if (regUsers[i].login==1)
+					userLog = i;
+
+			if (regUsers[userLog].login==1)
+			{
+				for(var j=0; j<regUsers[userLog].plane.length; j++)
+				{
+					var a = regUsers[userLog].plane[j].aereo;
+					var n = regUsers[userLog].plane[j].numero;
+					var type = regUsers[userLog].plane[j].tipologia;
+					var id = regUsers[userLog].plane[j].id;
+					
+					if(n!=="")
+					{
+						var riga = "<tr>"
+								 + "<td>" + a + "</td>"
+								 + "<td><center>" + n + "</center></td>"
+								 + "<td style='float:right'>" + type + "</td>"
+								 + "</tr>";
+						$('#tbodyA').append(riga);
+					}
+				}
+			}
+			return true;
+		}
+		
+		//STAMPA AEREI
+		function stampaSlots()
+		{
+			// caricamento dati dal localStorage
+			var regUsers = JSON.parse(localStorage.register);
+			var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+			
+			var a = sessionStorage.getItem('IdBook');
+			idTratta = a[0];	
+			
+			var userLog;
+			for (i = 0; i < regUsers.length; i++)
+				if (regUsers[i].login==1)
+					userLog = i;
+
+			if (regUsers[userLog].login==1)
+			{
+				for(j = 0; j < tratteNR[idTratta].slots.length; j++)
+				{
+					var nomeSlot = tratteNR[idTratta].slots[j].slot;
+					var numSlot = tratteNR[idTratta].slots[j].slotDisp;
+					var giorno = tratteNR[idTratta].slots[j].time.day;
+
+						if(numSlot>=0)
+						{
+							var riga = "<tr>"
+									 + "<td>" + nomeSlot + "</td>"
+									 + "<td><center>" + numSlot + "</center></td>"
+									 + "<td style='float:right'>" + giorno + "</td>"
+									 + "</tr>";
+							$('#tbodyS').append(riga);
+						}
+					
+				}
+			}
+			return true;
+		}
+		
+		function stampaTratta(x){
+
+			idTratta=x;
+
+			// caricamento dati dal localStorage
+			var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+			var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+			var regUsers = JSON.parse(localStorage.getItem("register"));
+			
+			var userLog;
+			for (i = 0; i < regUsers.length; i++)
+				if (regUsers[i].login==1)
+					userLog = i;
+
+			// variabili che mi serviranno durante la funzione
+			var confirmTratta = new String("");
+			var eachTratta = new String(""); // stringa da stampare
+			var f = new String(""); // stringa da stampare
+			var controllo = 0; // variabile per non far stampare il form di prenotazione
+			
+			eachTratta+=""
+				+"<div class='pannello'>"
+					+"<div class='panel-heading'>"
+						+"<h3 class='panel-title'>"
+							+"<strong>"+tratteNR[idTratta].name+"</strong>"
+						+"</h3>"
+					+"</div>"
+					+"<div class='panel-body'>"
+						+"<div class='row'>"
+							+"<div class='col-md-12'>"
+								+"<font size='4'><strong>"+tratteNR[idTratta].from+"&emsp;<img src='img/flight2.svg' width='70' height='35'> &emsp;"+tratteNR[idTratta].to+"</strong></font>"
+							+"</div>"
+						+"</div>"
+						+"<div class='row'>"
+							+"<div class='col-md-12' style='margin-bottom:6px'>"
+								+"<img src='img/two-flags.svg' width='30' height='30'>&emsp;"
+								+"<font size='3' style='vertical-align:middle'>"+tratteNR[idTratta].type+"</font>"
+							+"</div>"
+						+"</div>"
+						+"<div class='row'>"
+							+"<div class='col-md-12'>"
+								+"<img src='img/worldwide.svg' width='30' height='30'>&emsp;"
+									+"<font size='3' style='vertical-align:middle'>";
+									for(a = 0; a < aereiDisp.length; a++)
+									{
+										for(b = 0; b < tratteNR[idTratta].accepted_plane.length; b++)
+										{
+											//stampo l'elenco degli aerei accettati
+											if(aereiDisp[a].id == tratteNR[idTratta].accepted_plane[b])
+											{
+												eachTratta+="<label>"+aereiDisp[a].name+"</label>";
+												if(b == tratteNR[idTratta].accepted_plane.length-1)
+													eachTratta+="";
+												else
+													eachTratta+=", ";
+											}
+										}
+									}
+					eachTratta+="</font>"	
+							+"</div>"
+						+"</div>"						
+					+"</div>"
+				+"</div>";
+			
+			confirmTratta+=""	
+				+"<div class='panel-body conferma'>"		
+					+"<form name='prenotaForm' method='post' onSubmit='return prenotaTratta();'>"
+						+"<div class='col-md-12'>"
+							+"<div class='col-md-6'>"
+								+"<label style='margin-bottom:0'>Seleziona aereo:</label>"
+								+"<select class='form-control' name='modAereo' style='margin-bottom:20px'>"
+									+"<option value='' disabled selected>Seleziona aereo</option>";
+									for(a = 0; a < aereiDisp.length; a++)
+									{
+										for(b = 0; b < tratteNR[idTratta].accepted_plane.length; b++)
+										{
+											if(aereiDisp[a].id == tratteNR[idTratta].accepted_plane[b])
+											{
+												for(j = 0; j < regUsers[userLog].plane.length; j++)
+												{
+													if(regUsers[userLog].plane[j].aereo == aereiDisp[a].name && regUsers[userLog].plane[j].numero!=="")
+													{
+														//se i controlli sono veri, stampo l'option, altrimenti la stampo disabilitata
+														if(regUsers[userLog].plane[j].numero != 0)
+															confirmTratta+="<option required value='"+aereiDisp[a].id+"'>"+aereiDisp[a].name+"</option>";
+														else
+															confirmTratta+="<option title='Disponibilità terminata!' disabled value='"+aereiDisp[a].id+"'>"+aereiDisp[a].name+"</option>";
+													}
+												}
+											}
+										}
+									}
+				confirmTratta+="</select>"
+							+"</div>"
+							+"<div class='col-md-6'>"
+							+"<label style='margin-bottom:0'>Seleziona slot:</label>"
+							+"<select class='form-control' name='nomeSlot'>"
+								+"<option value='' disabled selected>Seleziona slot</option>";
+								for(j = 0; j < tratteNR[idTratta].slots.length; j++)
+								{
+									var numSlot = tratteNR[idTratta].slots[j].slotDisp;
+									//se i controlli sono veri, stampo l'option, altrimenti la stampo disabilitata
+									if( numSlot != 0)
+										confirmTratta+="<option required value='"+tratteNR[idTratta].slots[j].id+"'>"+tratteNR[idTratta].slots[j].slot+"</option>";
+									else
+										confirmTratta+="<option title='Disponibilità terminata!' disabled value='"+tratteNR[idTratta].slots[j].id+"'>"+tratteNR[idTratta].slots[j].slot+"</option>";
+								}
+			confirmTratta+="</select>"
+						+"</div>"
+								
+						+"</div>"
+						
+						+"<div class='col-md-12' style='margin-top:5px'>"
+								+"<button type='submit' id='pren' class='btn btn-block btn-success'>Prenota</button>"
+						+"</div>"
+					+"</form>"
+				+"</div>";
+				
+			document.getElementById("confirmTrattaP").innerHTML = confirmTratta;
+			document.getElementById("TrattaP").innerHTML = eachTratta;
+			return true;
+		}
+		
+		function prenotaTratta()
+		{
+			var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+			var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+			var regUsers = JSON.parse(localStorage.getItem("register"));
+			
+			var a = sessionStorage.getItem('IdBook');
+			x = a[0];
+			
+			var prenotazione;
+			var diSlot = false;
+			var diAereo = false;
+			var prog;
+			
+			var userLog = 0;
+			for (i = 0; i < regUsers.length; i++)
+				if (regUsers[i].login==1)
+					userLog = i;
+			
+			var c = regUsers[userLog].prenotazione.length;		//progressivo prenotazione = id prenotazione
+			
+			if(c==0)
+				prog=0;
+			else if(c>0)
+			{
+				prog = regUsers[userLog].prenotazione[c-1].idPrenotazione;
+				prog = prog+1;
+			}
+			var aereo = document.prenotaForm.modAereo.value;
+			var sl = document.prenotaForm.nomeSlot.value;
+					
+			//se aereo e slot sono diversi da null
+			if( aereo != "" && sl != "")
+			{
+				//Disp slot
+				for(i = 0; i<tratteNR[x].slots.length; i++)	
+				{			
+					var idSlot = tratteNR[x].slots[i].id;
+					//se la disponibilità dello slot scelto è > 0
+					if((idSlot == sl) && (tratteNR[x].slots[i].slotDisp > 0))
+					{
+						prenotazione = {
+							idPrenotazione:prog,
+							idTratta:tratteNR[x].id,
+							modelloAereo:aereo,
+							slot:sl,
+						};
+						//decremento la disponibilità dello slot e setto la variabile a true
+						tratteNR[x].slots[i].slotDisp -= 1;
+						diSlot=true;
+					}
+				}
+							
+				//Disp aereo
+				for(i = 0; i < regUsers[userLog].plane.length; i++)
+				{
+					var idAereoUsers = regUsers[userLog].plane[i].id;
+					if((idAereoUsers+1) == aereo)
+					{
+						//decremento la disponibilità dello slot e setto la variabile a true
+						regUsers[userLog].plane[i].numero-=1;
+						diAereo=true;
+					}
+				}
+			}
+			else if(aereo == "" && sl == "")
+				alert("Non hai selezionato entrambi i campi!");
+			else if(aereo != "" && sl == "")
+				alert("Non hai selezionato lo slot!");
+			else if(aereo == "" && sl != "")
+				alert("Non hai selezionato l'aereo!");
+			
+			//se entrambi le variabili sono vere
+			if(diSlot==true && diAereo==true)
+			{
+				//salvo il numero della prossima posizione
+				nextpos = regUsers[userLog].prenotazione.length;
+				//metto il vettore prenotazione nella posizione salvata
+				regUsers[userLog].prenotazione[nextpos] = prenotazione;
+				
+				//sovrascrivo il localStorage
+				localStorage.register = JSON.stringify(regUsers);
+				localStorage.tratte = JSON.stringify(tratteNR);  
+			
+				window.location.href = "account.html";				
+			}
+			else
+			{
+				window.location.href = "tratte.html";
+			}
+			
+			sessionStorage.clear();
+			return false;
+		}
+		</script>
+	</head>
+	
+	<body onload="getID(); stampaAerei(); stampaSlots(); stampaNavbarRight()">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default">
+			<div>
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="img/plane.svg" width="25" height="25" class="d-inline-block align-top" alt="">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="nav-item">
+						<a class="nav-link" href="tratte.html">Tratte</a>
+					</li>
+					<!--<li class="nav-item">
+						<a class="nav-link" href="#">Prenotazioni</a>
+					</li>-->
+				</ul>
+				<ul class="nav navbar-nav navbar-right" id="navb">
+				</ul>	
+			</div>
+		</nav>
+
+
+		<div class="col-md-8">
+			<div class='col-md-12'><div class='alert alert-success'><h3 class='titolo'>Effettua prenotazione:</h3></div></div>
+			
+			<div class="col-md-8">
+				<div id="TrattaP"></div>
+				<div id="confirmTrattaP"></div>
+			</div>
+			
+			<div class='col-md-4'>
+				<div class='panel-heading'>
+					<h4>Dettagli slots</h4>
+				</div>
+				<ul class='list-group' id='liSlot'>
+					<script>		
+						var a = sessionStorage.getItem('IdBook');
+						idTratta = a[0];
+						
+						var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+						var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+						var regUsers = JSON.parse(localStorage.getItem("register"));
+						
+						var eachSlot = new String("");
+						
+						for(j = 0; j < tratteNR[idTratta].slots.length; j++)
+						{
+							eachSlot+=""
+							+"<li class='list-group-item'>"
+								+"<div class='row toggle' id='dropdown-detail-"+(j+1)+"' data-toggle='detail-"+(j+1)+"'>"
+									+"<div class='col-md-10'><strong>Slot "+tratteNR[idTratta].slots[j].slot+"</strong></div>"
+									+"<div class='col-md-2'><i id='freccia' style='color:#337ab7' class='glyphicon glyphicon-menu-down'></i></div>"
+								+"</div>"
+								+"<div id='detail-"+(j+1)+"'>"
+									+"<hr class='divisore'>"
+									+"<div class='fluid-row'>"
+										+"<font size='2'><strong>Giorno</strong>: "+tratteNR[idTratta].slots[j].time.day+"</font><br>"
+										+"<font size='2'><strong>Orario partenza</strong>: "+tratteNR[idTratta].slots[j].time.from+"</font><br>"
+										+"<font size='2'><strong>Orario arrivo</strong>: "+tratteNR[idTratta].slots[j].time.to+"</font><br>"
+									+"</div>"
+								+"</div>"
+							+"</li>";
+						}
+						
+						document.getElementById("liSlot").innerHTML = eachSlot;
+					</script>
+				</ul>
+			</div>
+		
+
+		</div>
+		
+		<div class="col-md-4">
+			<div class="alert alert-info"><h3 class="titolo">Disponibilità:</h3></div>
+			<table class="table table-sm table-striped" style="margin-bottom:20px">			
+				<thead>
+					<tr>
+						<th style='width:33%'>Modello aereo</th>
+						<th style='width:33%'><center>Disponibilità</center></th>
+						<th style='float:right'>Tipologia volo</th>
+					</tr>
+				</thead>
+				<tbody id="tbodyA"></tbody>
+			</table>
+			
+			<table class="table table-sm table-striped" style="margin-bottom:20px">					
+				<thead>
+					<tr>
+						<th style='width:33%'>Nome slot</th>
+						<th style='width:33%'><center>Disponibilità</center></th>
+						<th style='float:right'>Giorno Partenza</th>
+					</tr>
+				</thead>
+				<tbody id="tbodyS"></tbody>
+			</table>
+		</div>
+	</body>
+</html>

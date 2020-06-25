@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+
+		<!-- FAVICON -->
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Aerei | ilVolo</title>
+
+		<!-- CSS -->
+		<link href="css/DidactGothic.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/book.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<link rel="stylesheet" href="css/fontAwesome.css">
+		
+		<!-- JS -->
+		<script src="js/jQuery.js"></script>
+		<script src="js/passiveEvents.js"></script>
+		<script src="js/bootstrap.js"></script>
+
+		<script src="json/tratte.json"></script>
+		<script type="text/javascript">		
+		//NAVBAR
+		function stampaNavbarUtente()
+		{
+			var regUsers = JSON.parse(localStorage.register);
+			var n = new String("");
+			var loggato=false;
+				
+			for (i = 0; i < regUsers.length; i++)
+			{
+				if (regUsers[i].login == 1)
+				{
+					n+="<li class='nav-item'>"					
+							+"<a class='nav-link' style='pointer-events:none' class='btn btn-block btn-success'>Ciao, "+regUsers[i].companyName+"</a>"
+						+"</li>"
+						+"<li class='nav-item'>"
+							+"<a class='nav-link' href='account.html'>Il tuo account</a>"
+						+"</li>";
+					
+					loggato=true;
+				}
+			}
+			
+			if(loggato==false)
+			{
+				n+="<li class='nav-item'>"
+						+"<a class='nav-link' href='login.html'>Login</a>"
+					+"</li>"
+					+"<li class='nav-item'>"
+						+"<a class='nav-link' href='register.html'>Registrati</a>"
+					+"</li>";
+
+			}
+				
+			document.getElementById("navb").innerHTML = n;	
+		}
+		
+		// Estraggo l'ID dell'aereo da stampare
+		function getIDAereo() {
+			var a = sessionStorage.getItem('IdPlane');
+			stampaAereo(a[0]);
+			sessionStorage.clear();
+		}
+		
+		function stampaAereo(x)
+		{
+			var idAereo = x;
+			
+			var tratteNR = JSON.parse(localStorage.getItem("tratte"));
+					var aereiDisp = JSON.parse(localStorage.getItem("aerei"));
+					var regUsers = JSON.parse(localStorage.getItem("register"));
+					
+					var userLog;
+					for (i = 0; i < regUsers.length; i++)
+						if (regUsers[i].login==1)
+							userLog = i;
+
+					// variabili che mi serviranno durante la funzione
+					var datiAereo = new String("");
+					
+					datiAereo+=""
+						+"<div class='panel-heading'>"
+							+"<h2>"
+								+"<strong>"+aereiDisp[idAereo-2].name+"</strong>"
+							+"</h2>"
+						+"</div>"
+						+"<div class='panel-body'>"
+							+"<div class='row'>"
+								+"<div class='col-md-6'>"							
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Tipologia</strong>: "+aereiDisp[idAereo-2].tipologia+"</font>"
+									+"</div>"																	
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Lunghezza</strong>: "+aereiDisp[idAereo-2].lunghezza+" m</font>"
+									+"</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Apertura alare</strong>: "+aereiDisp[idAereo-2]["apertura alare"]+" m</font>"
+									+"</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Velocità</strong>: "+aereiDisp[idAereo-2].vel+" km/h</font>"
+									+"</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Velocità massima</strong>: "+aereiDisp[idAereo-2]["vel max"]+" km/h</font>"
+									+"</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Superficie alare</strong>: "+aereiDisp[idAereo-2]["superficie alare"]+" m</font>"
+									+"</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Peso a vuoto</strong>: "+aereiDisp[idAereo-2]["peso a vuoto"]+" kg</font>"
+									+"</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Peso massimo al decollo</strong>: "+aereiDisp[idAereo-2]["peso max al decollo"]+" kg</font>"
+									+"</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Passeggeri</strong>:</font><br>"
+										+"<font size='3'><strong><i>"+(1)+" Classe</i></strong>: "+aereiDisp[idAereo-2].passeggeri["1classe"]+"&emsp;</font>";
+										if(aereiDisp[idAereo-2].passeggeri["2classe"] != null)									
+											datiAereo+="<font size='3'><strong><i>"+(2)+" Classe</i></strong>: "+aereiDisp[idAereo-2].passeggeri["2classe"]+"&emsp;</font>";
+										if(aereiDisp[idAereo-2].passeggeri["3classe"] != null)			
+										datiAereo+="<font size='3'><strong><i>"+(3)+" Classe</i></strong>: "+aereiDisp[idAereo-2].passeggeri["3classe"]+"</font>";										
+									datiAereo+="</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Capacità combustibile</strong>: "+aereiDisp[idAereo-2]["capacità combustibile"]+" l</font>"
+									+"</div>"
+									+"<div style='margin-bottom:8px'>"
+										+"<font size='3'><strong>Motore</strong>: "+aereiDisp[idAereo-2].motore+"</font>"
+									+"</div>"									
+								+"</div>"
+								+"<div class='col-md-6'>"
+									+"<img class='img-rounded' style='float:right; margin-top:18%; margin-right:10%' src='img/"+idAereo+".png' width=300px></img>"
+								+"</div>"
+							+"</div>"
+						+"</div>";
+					
+					document.getElementById("datiAereo").innerHTML = datiAereo;
+			
+		}
+		
+		</script>
+	</head>
+	
+	<body onload="stampaNavbarUtente(); getIDAereo()">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default">
+			<div>
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">
+					<img src="img/plane.svg" width="25" height="25" class="d-inline-block align-top" alt="">
+				</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-left">
+					<li class="nav-item">
+						<a class="nav-link" href="tratte.html">Tratte</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" id="navb">
+				</ul>	
+			</div>
+		</nav>
+
+		<div class="col-md-2"> 
+		</div>
+		
+		<div class="col-md-8">
+			<div class="pannello" id="datiAereo">
+			</div>
+		</div>
+		
+		<div class="col-md-2"> 
+		</div>			
+	</body>
+</html>
