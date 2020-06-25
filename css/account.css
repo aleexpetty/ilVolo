@@ -1,0 +1,182 @@
+.notReg
+{
+	text-align: center;
+	margin-top: 3%;
+}
+
+.registerForm
+{
+	padding-top:5%;
+}
+
+body
+{
+	margin-top:20px;
+	font-family: 'Didact Gothic', sans-serif;
+}
+
+.nAereo
+{
+	width: 30%;
+}
+
+.tAereo
+{
+	width:70%;
+}
+
+.form-control { 
+  outline:0 !important;
+  border-width:0 0 2px !important;
+  border-color: #337AB7 !important;
+}
+
+.navbar-nav li a:hover {
+	color:#337ab7 !important;
+	background-color:white !important;
+}
+
+.thumbnail
+{
+	margin-bottom:0 !important;
+	margin-top:0 !important;
+}
+
+.complete:hover
+{
+	background-color:#00df0f !important;
+	border-color:white;
+}
+
+.navbar-brand
+{
+	padding: 12px 25px !important;
+}
+
+.well
+{
+	margin-top:5% !important;
+}
+
+h3
+{
+	margin-top:0 !important;
+}
+
+.panel-heading
+{
+	background-color:#337ab7 !important;
+	color:white !important;
+}
+
+.panel-body
+{
+	background-color:#f5f5f5 !important;
+	color:black !important;
+	border-bottom-left-radius: 3px !important;
+	border-bottom-right-radius: 3px !important;
+	border: 1px solid #337ab7;
+}
+
+.pannello
+{
+	margin-bottom:20px;
+}
+
+thead
+{
+	border:0 !important;
+	background-color: #337ab7;
+	color:white;
+}
+
+.table > thead:first-child > tr:first-child > th
+{
+	border-top: 0 !important;
+    border-bottom: 0 !important;
+
+}
+
+.table > tbody > tr > td
+{
+	border-top: 0 !important;
+}
+
+table
+{
+	border-collapse: collapse !important;
+	border-radius: 3px !important;
+	overflow: hidden !important;				/*nasconde ciò che esce rispetto ai bordi*/
+}
+
+tr
+{
+    border-top: 1px solid #337ab7 !important;
+	border-right: 1px solid #337ab7 !important;
+	border-left: 1px solid #337ab7 !important;
+	border-bottom: 1px solid #337ab7 !important;
+}
+
+h3
+{
+	margin-bottom: 0 !important;
+	width:auto !important;
+}
+
+h5
+{
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+.slots
+{
+	margin-top: 5px !important;
+	padding: 6px 15px !important;
+	background-color:#CC3535 !important;
+	color:white !important;
+}
+
+.slotBody
+{
+	border: 1px solid #CC3535 !important;
+	padding: 10px !important;
+}
+
+h2
+{
+	margin-top: 0 !important;
+}
+
+#operaz
+{
+	color:#337ab7 !important;
+	background-color: white !important;
+}
+
+#mod:hover
+{
+	color: white !important;
+	background-color: #eea236 !important;
+}
+
+#canc:hover
+{
+	color: white !important;
+	background-color: #d43f3a !important;
+}
+
+#canc
+{
+	cursor: pointer !important;
+}
+
+#compN
+{
+	color:white !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+	line-height: 20px !important;
+}
+
+
