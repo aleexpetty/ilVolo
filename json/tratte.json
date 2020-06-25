@@ -1,0 +1,226 @@
+tratte=
+[
+	{
+		"id": 1,
+		"name": "Tratta 1",
+		"type": "Internazionale",
+		"from": "New York",
+		"to": "Milano",
+		"accepted_plane": [2,4,5],
+		"slots": 
+		[
+			{
+				"id": 1,
+				"slot": "AK-101",
+				"slotDisp": 3,
+				"time": 
+					{			
+						"day": "Lunedì",
+						"from": "08:00",
+						"to": "16:30"
+					}
+			}, 
+			{
+				"id": 2,
+				"slot": "AK-102",
+				"slotDisp": 1,
+				"time": 
+					{
+						"day": "Giovedì",
+						"from": "14:00",
+						"to": "22:30"
+					}
+			}
+		]
+	},
+	{	
+		"id": 2,
+		"name": "Tratta 2",
+		"type": "Nazionale",
+		"from": "Milano",
+		"to": "Palermo",
+		"accepted_plane": [3,6],
+		"slots": 
+		[
+			{
+				"id": 1,
+				"slot": "AK-201",
+				"slotDisp": 6,
+				"time":
+					{
+						"day": "Lunedì",
+						"from": "08:00",
+						"to": "09:00"
+					}
+			}, 
+			{
+				"id": 2,
+				"slot": "AK-202",
+				"slotDisp": 10,
+				"time":
+					{
+						"day": "Venerdì",
+						"from": "15:00",
+						"to": "16:00"
+					}
+			}
+		]
+	},
+	{	
+		"id": 3,
+		"name": "Tratta 3",
+		"type": "Internazionale",
+		"from": "Londra",
+		"to": "Roma",
+		"accepted_plane": [2,4,5],
+		"slots":
+		[
+			{
+				"id": 1,
+				"slot": "AK-301",
+				"slotDisp": 3,
+				"time":
+					{
+						"day": "Giovedì",
+						"from": "06:30",
+						"to": "08:20"
+					}
+			}, 
+			{
+				"id": 2,
+				"slot": "AK-302",
+				"slotDisp": 4,
+				"time":
+					{
+						"day": "Martedì",
+						"from": "19:40",
+						"to": "23:05"
+					}
+			},
+			{
+				"id": 3,
+				"slot": "AK-303",
+				"slotDisp": 2,
+				"time":
+					{
+						"day": "Mercoledì",
+						"from": "10:25",
+						"to": "13:55"
+					}
+			}
+		]
+	},
+	{
+		"id": 4,
+		"name": "Tratta 4",
+		"type": "Nazionale",
+		"from": "Roma",
+		"to": "Torino",
+		"accepted_plane": [3,6],
+		"slots":
+		[
+			{
+				"id": 1,
+				"slot": "AK-401",
+				"slotDisp": 1,
+				"time":
+					{
+						"day": "Venerdì",
+						"from": "12:00",
+						"to": "13:00"
+					}
+			}, 
+			{
+				"id": 2,
+				"slot": "AK-402",
+				"slotDisp": 3,
+				"time":
+					{
+						"day": "Sabato",
+						"from": "19:00",
+						"to": "20:00"
+					}
+			}
+		]
+	}
+]
+
+aerei=
+[
+	{	
+		"id":2,
+		"name":"Boeing 767-300",
+		"tipologia":"Internazionale",
+		"lunghezza":54.9,
+		"apertura alare":47.6, 
+		"vel":851,
+		"vel max":913,
+		"superficie alare":283.3,
+		"peso a vuoto":86070, 
+		"peso max al decollo":158760, 
+		"passeggeri":{"1classe":350,"2classe":269,"3classe":218},
+		"capacità combustibile":90.625,
+		"motore":"2 turbofan General Electric CF6-80C2"
+	},
+	{
+		"id":3,
+		"name":"Boeing 737-800",
+		"tipologia":"Nazionale",
+		"lunghezza":33.4,
+		"apertura alare":35.8, 
+		"vel":840,
+		"vel max":945,
+		"superficie alare":105.44,
+		"peso a vuoto":32704, 
+		"peso max al decollo":56472, 
+		"passeggeri":{"1classe":189},
+		"capacità combustibile":90.625,
+		"motore":"2 turbofan CFM56-3C1"
+	},
+	{
+		"id":4,
+		"name":"Boeing 777",
+		"tipologia":"Internazionale",
+		"lunghezza":63.7 ,
+		"apertura alare":60.9, 
+		"vel":1037.232,
+		"vel max":1167.29,
+		"superficie alare":427.8,
+		"peso a vuoto":204750, 
+		"peso max al decollo":297550, 
+		"passeggeri":{"1classe":440,"2classe":400,"3classe":301},
+		"capacità combustibile":171.170,
+		"motore":"2 turbofan CFM56-3C1"
+	},
+	{
+		"id":5,
+		"name":"Airbus A380",
+		"tipologia":"Internazionale",
+		"lunghezza":72.72 ,
+		"apertura alare":79.75,
+		"vel":1041,
+		"vel max":1176,
+		"superficie alare":845,
+		"peso a vuoto":369000, 
+		"peso max al decollo":575000, 
+		"passeggeri":{"1classe":853,"2classe":645,"3classe":525},
+		"capacità combustibile":323546,
+		"motore":"4 turbofan Rolls-Royce Trent 900"
+	},
+	{
+		"id":6,
+		"name":"Airbus A340",
+		"tipologia":"Nazionale",
+		"lunghezza":63.60 ,
+		"apertura alare":60.3,
+		"vel":1012.536,
+		"vel max":1061.928,
+		"superficie alare":361.6,
+		"peso a vuoto":178000, 
+		"peso max al decollo":275000, 
+		"passeggeri":{"1classe":335,"2classe":295},
+		"capacità combustibile":140.640,
+		"motore":"4 turbofan CFM56-5C4/P"
+	}
+]
+
